@@ -43,13 +43,13 @@ public class RecordatorioModel {
     public String getTexto() {
         return texto;
     }
-    public void setTexto(final String texto) {
+    public void setTexto(String texto) {
         this.texto = texto;
     }
     public Date getFecha() {
         return fecha;
     }
-    public void setFecha(final Date fecha) {
+    public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
     @Override

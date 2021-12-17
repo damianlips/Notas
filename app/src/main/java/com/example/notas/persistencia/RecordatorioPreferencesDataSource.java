@@ -6,7 +6,9 @@ import android.preference.PreferenceManager;
 
 import com.example.notas.model.RecordatorioModel;
 
-import java.sql.Date;
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,12 +45,22 @@ public class RecordatorioPreferencesDataSource implements RecordatorioDataSource
         int cant = sharedPreferences.getInt("cantidad",0);
         boolean exito = true;
         for (int i = 0; i < cant && exito; i++) {
-            exito = sharedPreferences.contains(cant+"texto");
+            exito = sharedPreferences.contains(i+"texto");
             if(exito){
                 RecordatorioModel recordatorio = new RecordatorioModel();
 
-                recordatorio.setTexto(sharedPreferences.getString(cant+"texto",""));
-                recordatorio.setFecha(Date.valueOf(sharedPreferences.getString(cant+"fecha","")));
+                String t = sharedPreferences.getString(i+"texto","");
+                recordatorio.setTexto(t);
+
+                String datestring = sharedPreferences.getString(i+"fecha","");
+                Date d= null;
+                try {
+                    d = (Date) new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(datestring);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                recordatorio.setFecha(d);
+
                 recordatorios.add(recordatorio);
             }
         }

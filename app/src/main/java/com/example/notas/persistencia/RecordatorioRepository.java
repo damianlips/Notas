@@ -12,14 +12,16 @@ public class RecordatorioRepository {
     }
 // Metodos que recuperan los recordatorios usando el data source
 
+    boolean salida;
+    public boolean guardarRecordatorio(RecordatorioModel recordatorio) {
 
-    public void guardarRecordatorio(RecordatorioModel recordatorio) {
         datasource.guardarRecordatorio(recordatorio, new RecordatorioDataSource.GuardarRecordatorioCallback() {
             @Override
             public void resultado(boolean exito) {
-
+                salida= exito;
             }
         });
+        return salida;
     }
 
 
@@ -31,6 +33,7 @@ public class RecordatorioRepository {
             @Override
             public void resultado(boolean exito, List<RecordatorioModel> recordatorios) {
                 if(exito){
+//                    salida = exito;
                     lista.addAll(recordatorios);
                 }
             }
