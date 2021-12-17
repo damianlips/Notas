@@ -6,12 +6,11 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
 import android.icu.util.Calendar;
-import android.icu.util.TimeZone;
 import android.os.Build;
-import android.support.design.button.MaterialButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -24,11 +23,12 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.notas.model.RecordatorioModel;
+import com.example.notas.persistencia.MyRoomDB;
+import com.example.notas.persistencia.RecordatorioDAO;
 import com.example.notas.persistencia.RecordatorioPreferencesDataSource;
 import com.example.notas.persistencia.RecordatorioRepository;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
     TextInputEditText descripcion;
@@ -37,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
     TextInputLayout horalayout;
     TextInputEditText hora;
     AppCompatButton guardar;
+
+    private static MyRoomDB roomdb;
+    private static RecordatorioDAO roomdao;
 
     public static String CHANNEL_ID= "XD";
     @Override
@@ -53,6 +56,11 @@ public class MainActivity extends AppCompatActivity {
         guardar = findViewById(R.id.guardar);
         Calendar calendario = Calendar.getInstance();
         calendario.setTimeInMillis(System.currentTimeMillis());
+
+
+
+        roomdb = Room.databaseBuilder(this,MyRoomDB.class,"roomdb").fallbackToDestructiveMigration().build();
+        roomdao = roomdb.getRecordatorioDAO();
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -144,10 +152,22 @@ public class MainActivity extends AppCompatActivity {
                         //alarm.set(AlarmManager.RTC_WAKEUP, (calendario.getTimeInMillis() + ((new Long(((TimePicker)hora.getTag()).getHour()) )*3600000 ) + ((new Long(((TimePicker)hora.getTag()).getMinute()))* 60000) ) , pendingIntent);
 
 
-
-                        RecordatorioModel recordatorio = new RecordatorioModel(descripcion.getText().toString(),calendario.getTime());
-                        RecordatorioRepository repositorio = new RecordatorioRepository(new RecordatorioPreferencesDataSource(getBaseContext()));
-                        repositorio.guardarRecordatorio(recordatorio);
+                        RecordatorioModel recordatorio = new RecordatorioModel(descripcion.getText().toString(), calendario.getTime());
+                        switch (1){
+                            case 0: {
+                                RecordatorioRepository repositorio = new RecordatorioRepository(new RecordatorioPreferencesDataSource(getBaseContext()));
+                                repositorio.guardarRecordatorio(recordatorio);
+                                break;
+                            }
+                            case 1: {
+                                Runnable insertFila = () -> {
+                                    roomdb.getRecordatorioDAO().nuevoRecordatorio(recordatorio);
+                                    roomdb.getRecordatorioDAO().nuevoRecordatorio(recordatorio);
+                                };
+                                new Thread(insertFila).start();
+                                break;
+                            }
+                        }
                     }
                 }
 

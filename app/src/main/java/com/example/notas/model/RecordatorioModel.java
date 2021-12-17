@@ -1,16 +1,42 @@
 package com.example.notas.model;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 import java.util.Date;
 import java.util.Objects;
+import java.util.UUID;
 
+import android.support.annotation.NonNull;
+
+
+@Entity(tableName = "TABLA_RECORDATORIOS")
 public class RecordatorioModel {
+
+    @PrimaryKey
+    @NonNull
+    @ColumnInfo(name = "ID_RECORDATORIO")
+    private String id;
+
+
     private String texto;
     private Date fecha;
 
-    public RecordatorioModel(){
+    @NonNull
+    public String getId() {
+        return id;
+    }
 
+    public void setId(@NonNull String id) {
+        this.id = id;
+    }
+
+    public RecordatorioModel(){
+        this.id= UUID.randomUUID().toString();
     }
     public RecordatorioModel(final String texto, final Date fecha) {
+        this.id= UUID.randomUUID().toString();
         this.texto = texto;
         this.fecha = fecha;
     }
