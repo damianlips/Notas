@@ -1,5 +1,6 @@
 package com.example.notas;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.NotificationChannel;
@@ -144,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     else{
 
-                        Toast.makeText(MainActivity.this, "Recordatorio creado con exito" , Toast.LENGTH_LONG).show();
+                       // Toast.makeText(MainActivity.this, "Recordatorio creado con exito" , Toast.LENGTH_LONG).show();
 
 
                         alarm.set(AlarmManager.RTC_WAKEUP, calendario.getTimeInMillis() + ((new Long(((TimePicker)hora.getTag()).getHour()) )*3600000 ) + ((new Long(((TimePicker)hora.getTag()).getMinute()))* 60000) , pendingIntent);
@@ -152,22 +153,19 @@ public class MainActivity extends AppCompatActivity {
                         //alarm.set(AlarmManager.RTC_WAKEUP, (calendario.getTimeInMillis() + ((new Long(((TimePicker)hora.getTag()).getHour()) )*3600000 ) + ((new Long(((TimePicker)hora.getTag()).getMinute()))* 60000) ) , pendingIntent);
 
 
-                        RecordatorioModel recordatorio = new RecordatorioModel(descripcion.getText().toString(), calendario.getTime());
-                        switch (1){
-                            case 0: {
-                                RecordatorioRepository repositorio = new RecordatorioRepository(new RecordatorioPreferencesDataSource(getBaseContext()));
-                                repositorio.guardarRecordatorio(recordatorio);
-                                break;
-                            }
-                            case 1: {
-                                Runnable insertFila = () -> {
-                                    roomdb.getRecordatorioDAO().nuevoRecordatorio(recordatorio);
-                                    roomdb.getRecordatorioDAO().nuevoRecordatorio(recordatorio);
-                                };
-                                new Thread(insertFila).start();
-                                break;
-                            }
+
+                        RecordatorioModel recordatorio = new RecordatorioModel(descripcion.getText().toString(),calendario.getTime());
+                        RecordatorioRepository repositorio = new RecordatorioRepository(new RecordatorioPreferencesDataSource(getBaseContext()));
+                        Intent result = new Intent();
+                        if(repositorio.guardarRecordatorio(recordatorio)){
+                            setResult(Activity.RESULT_OK,result);
+                            finish();
                         }
+                        else {
+                            setResult(Activity.RESULT_CANCELED,result);
+                            finish();
+                        }
+
                     }
                 }
 

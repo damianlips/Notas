@@ -14,7 +14,6 @@ public class RecordatorioRepository {
 
     boolean salida;
     public boolean guardarRecordatorio(RecordatorioModel recordatorio) {
-
         datasource.guardarRecordatorio(recordatorio, new RecordatorioDataSource.GuardarRecordatorioCallback() {
             @Override
             public void resultado(boolean exito) {
