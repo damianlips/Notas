@@ -1,12 +1,32 @@
 package com.example.notas.persistencia;
 
+import android.content.Context;
+
 import com.example.notas.model.RecordatorioModel;
+import com.example.notas.persistencia.room.RecordatorioRoomDataSource;
+import com.example.notas.persistencia.sharedpreferences.RecordatorioPreferencesDataSource;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RecordatorioRepository {
     private final RecordatorioDataSource datasource;
+
+    public RecordatorioRepository(Context ctx){
+        switch (0){
+            case 0:
+                this.datasource = new RecordatorioPreferencesDataSource(ctx);
+                break;
+            case 1:
+                this.datasource = new RecordatorioRoomDataSource(ctx);
+                break;
+            default:
+                this.datasource = new RecordatorioPreferencesDataSource(ctx);
+                break;
+
+        }
+    }
+
     public RecordatorioRepository(final RecordatorioDataSource datasource) {
         this.datasource = datasource;
     }

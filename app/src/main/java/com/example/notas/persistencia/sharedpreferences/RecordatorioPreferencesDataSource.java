@@ -1,10 +1,11 @@
-package com.example.notas.persistencia;
+package com.example.notas.persistencia.sharedpreferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.example.notas.model.RecordatorioModel;
+import com.example.notas.persistencia.RecordatorioDataSource;
 
 import java.util.Date;
 import java.text.ParseException;
@@ -29,12 +30,7 @@ public class RecordatorioPreferencesDataSource implements RecordatorioDataSource
         editor.putInt("cantidad",cant+1);
         callback.resultado(editor.commit());
 
-//        callback = new GuardarRecordatorioCallback() {
-//            @Override
-//            public void resultado(boolean exito) {
-//
-//            }
-//        }
+
     }
 
     @Override
@@ -49,8 +45,8 @@ public class RecordatorioPreferencesDataSource implements RecordatorioDataSource
             if(exito){
                 RecordatorioModel recordatorio = new RecordatorioModel();
 
-                String t = sharedPreferences.getString(i+"texto","");
-                recordatorio.setTexto(t);
+
+                recordatorio.setTexto(sharedPreferences.getString(i+"texto",""));
 
                 String datestring = sharedPreferences.getString(i+"fecha","");
                 Date d= null;

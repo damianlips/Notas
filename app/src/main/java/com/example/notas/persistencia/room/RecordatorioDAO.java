@@ -1,8 +1,9 @@
-package com.example.notas.persistencia;
+package com.example.notas.persistencia.room;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
 import com.example.notas.model.RecordatorioModel;
@@ -21,4 +22,6 @@ public interface RecordatorioDAO {
     public void borrarRecordatorio(RecordatorioModel r);
 
 
+    @Query("SELECT * FROM TABLA_RECORDATORIOS")
+    public RecordatorioModel[] cargarRecordatorios();
 }

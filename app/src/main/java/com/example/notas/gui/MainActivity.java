@@ -1,4 +1,4 @@
-package com.example.notas;
+package com.example.notas.gui;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -7,7 +7,6 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
-import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
 import android.icu.util.Calendar;
@@ -23,24 +22,26 @@ import android.widget.DatePicker;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.notas.R;
 import com.example.notas.model.RecordatorioModel;
-import com.example.notas.persistencia.MyRoomDB;
-import com.example.notas.persistencia.RecordatorioDAO;
-import com.example.notas.persistencia.RecordatorioPreferencesDataSource;
 import com.example.notas.persistencia.RecordatorioRepository;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static int persistencia=0;
+
     TextInputEditText descripcion;
     TextInputEditText fecha;
     TextInputLayout fechalayout;
     TextInputLayout horalayout;
     TextInputEditText hora;
     AppCompatButton guardar;
+    RecordatorioRepository repositorio;
 
-    private static MyRoomDB roomdb;
-    private static RecordatorioDAO roomdao;
+
 
     public static String CHANNEL_ID= "XD";
     @Override
@@ -59,9 +60,11 @@ public class MainActivity extends AppCompatActivity {
         calendario.setTimeInMillis(System.currentTimeMillis());
 
 
+        repositorio = new RecordatorioRepository(getBaseContext());
 
-        roomdb = Room.databaseBuilder(this,MyRoomDB.class,"roomdb").fallbackToDestructiveMigration().build();
-        roomdao = roomdb.getRecordatorioDAO();
+
+
+
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -147,15 +150,15 @@ public class MainActivity extends AppCompatActivity {
 
                        // Toast.makeText(MainActivity.this, "Recordatorio creado con exito" , Toast.LENGTH_LONG).show();
 
-
-                        alarm.set(AlarmManager.RTC_WAKEUP, calendario.getTimeInMillis() + ((new Long(((TimePicker)hora.getTag()).getHour()) )*3600000 ) + ((new Long(((TimePicker)hora.getTag()).getMinute()))* 60000) , pendingIntent);
+                        long fechamillis = calendario.getTimeInMillis() + ((new Long(((TimePicker)hora.getTag()).getHour()) )*3600000 ) + ((new Long(((TimePicker)hora.getTag()).getMinute()))* 60000);
+                        alarm.set(AlarmManager.RTC_WAKEUP, fechamillis , pendingIntent);
 
                         //alarm.set(AlarmManager.RTC_WAKEUP, (calendario.getTimeInMillis() + ((new Long(((TimePicker)hora.getTag()).getHour()) )*3600000 ) + ((new Long(((TimePicker)hora.getTag()).getMinute()))* 60000) ) , pendingIntent);
 
 
 
-                        RecordatorioModel recordatorio = new RecordatorioModel(descripcion.getText().toString(),calendario.getTime());
-                        RecordatorioRepository repositorio = new RecordatorioRepository(new RecordatorioPreferencesDataSource(getBaseContext()));
+                        RecordatorioModel recordatorio = new RecordatorioModel(descripcion.getText().toString(),new Date(fechamillis));
+
                         Intent result = new Intent();
                         if(repositorio.guardarRecordatorio(recordatorio)){
                             setResult(Activity.RESULT_OK,result);

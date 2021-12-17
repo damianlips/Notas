@@ -1,4 +1,4 @@
-package com.example.notas;
+package com.example.notas.gui;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
