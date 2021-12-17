@@ -23,6 +23,10 @@ import android.widget.DatePicker;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.notas.model.RecordatorioModel;
+import com.example.notas.persistencia.RecordatorioPreferencesDataSource;
+import com.example.notas.persistencia.RecordatorioRepository;
+
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -140,6 +144,10 @@ public class MainActivity extends AppCompatActivity {
                         //alarm.set(AlarmManager.RTC_WAKEUP, (calendario.getTimeInMillis() + ((new Long(((TimePicker)hora.getTag()).getHour()) )*3600000 ) + ((new Long(((TimePicker)hora.getTag()).getMinute()))* 60000) ) , pendingIntent);
 
 
+
+                        RecordatorioModel recordatorio = new RecordatorioModel(descripcion.getText().toString(),calendario.getTime());
+                        RecordatorioRepository repositorio = new RecordatorioRepository(new RecordatorioPreferencesDataSource(getBaseContext()));
+                        repositorio.guardarRecordatorio(recordatorio);
                     }
                 }
 
