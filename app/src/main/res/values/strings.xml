@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Notas</string>
+    <string name="hintdatepicker">Seleccione una fecha...</string>
+    <string name="hinttimepicker">Seleccione una hora...</string>
+    <string name="hinttexto">Ingrese una descripción...</string>
+    <string name="textoguardar">Guardar</string>
+
 </resources>
