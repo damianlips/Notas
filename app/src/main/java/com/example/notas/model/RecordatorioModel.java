@@ -67,4 +67,27 @@ public class RecordatorioModel {
     public int hashCode() {
         return Objects.hash(texto) + Objects.hash(fecha);
     }
+
+    @Override
+    public String toString() {
+
+        StringBuilder strb = new StringBuilder();
+        strb.append("(Programado para ");
+        if(fecha.getDate()<10) strb.append('0');
+        strb.append(fecha.getDate());
+        strb.append('/');
+        if(fecha.getMonth()<9) strb.append('0');
+        strb.append(fecha.getMonth()+1);
+        strb.append('/');
+        strb.append(fecha.getYear());
+        strb.append(" a las ");
+        if(fecha.getHours()<10) strb.append('0');
+        strb.append(fecha.getHours());
+        strb.append(':');
+        if(fecha.getMinutes()<10) strb.append('0');
+        strb.append(fecha.getMinutes());
+        strb.append(System.getProperty("line.separator"));
+        strb.append(texto);
+        return strb.toString();
+    }
 }
