@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Notas">
         <activity
+            android:name=".gui.Settings"
+            android:exported="true" />
+        <activity
             android:name=".gui.NotasExistentes"
             android:exported="true">
             <intent-filter>

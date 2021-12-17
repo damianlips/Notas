@@ -17,7 +17,7 @@ public class RecordatorioReceiver extends BroadcastReceiver {
 
             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID )
                     .setSmallIcon(android.R.drawable.star_on)
-                    .setContentTitle("NOTIFIQUEIBOL")
+                    .setContentTitle("Recordatorio programado:")
                     .setContentText(intent.getExtras().getString(TEXTO))
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                     .setStyle(new NotificationCompat.BigPictureStyle())

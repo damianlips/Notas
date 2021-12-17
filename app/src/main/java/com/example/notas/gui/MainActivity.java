@@ -9,8 +9,10 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.icu.util.Calendar;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -151,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
                        // Toast.makeText(MainActivity.this, "Recordatorio creado con exito" , Toast.LENGTH_LONG).show();
 
                         long fechamillis = calendario.getTimeInMillis() + ((new Long(((TimePicker)hora.getTag()).getHour()) )*3600000 ) + ((new Long(((TimePicker)hora.getTag()).getMinute()))* 60000);
-                        alarm.set(AlarmManager.RTC_WAKEUP, fechamillis , pendingIntent);
+
 
                         //alarm.set(AlarmManager.RTC_WAKEUP, (calendario.getTimeInMillis() + ((new Long(((TimePicker)hora.getTag()).getHour()) )*3600000 ) + ((new Long(((TimePicker)hora.getTag()).getMinute()))* 60000) ) , pendingIntent);
 
@@ -161,6 +163,9 @@ public class MainActivity extends AppCompatActivity {
 
                         Intent result = new Intent();
                         if(repositorio.guardarRecordatorio(recordatorio)){
+                            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                            if(sharedPreferences.getBoolean("mostrar_notificaciones",false))
+                                alarm.set(AlarmManager.RTC_WAKEUP, fechamillis , pendingIntent);
                             setResult(Activity.RESULT_OK,result);
                             finish();
                         }
@@ -168,6 +173,8 @@ public class MainActivity extends AppCompatActivity {
                             setResult(Activity.RESULT_CANCELED,result);
                             finish();
                         }
+
+
 
                     }
                 }

@@ -60,8 +60,9 @@ public class NotasExistentes extends AppCompatActivity {
                         startActivityForResult(intent,CODIGO_CREAR_NOTA);
                         break;
                     case 1:
-                        Toast.makeText(NotasExistentes.this, "Falta completar esta funcionalidad" , Toast.LENGTH_LONG).show();
-
+                        Intent intent2 = new Intent(NotasExistentes.this, Settings.class);
+                        startActivity(intent2);
+                        break;
                 }
             }
         });

@@ -86,6 +86,7 @@ public class RecordatorioModel {
         strb.append(':');
         if(fecha.getMinutes()<10) strb.append('0');
         strb.append(fecha.getMinutes());
+        strb.append(')');
         strb.append(System.getProperty("line.separator"));
         strb.append(texto);
         return strb.toString();
