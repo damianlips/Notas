@@ -1,10 +1,14 @@
 package com.example.notas;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.support.annotation.Nullable;
+import android.support.transition.Slide;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -63,5 +67,22 @@ public class NotasExistentes extends AppCompatActivity {
         });
 
 
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mDrawerLayout.closeDrawers();
+        if(requestCode == CODIGO_CREAR_NOTA){
+            if(resultCode == Activity.RESULT_OK){
+                String[] creados = (String[]) recordatorioRepository.recuperarRecordatorios().stream()
+                        .map(c-> c.toString()).toArray(String[]::new)
+                        ;
+                ArrayAdapter<String> adapterCreadas = new ArrayAdapter<String>(NotasExistentes.this, android.R.layout.simple_list_item_1,creados);
+                Toast.makeText(NotasExistentes.this, "El recordatorio se creo correctamente", Toast.LENGTH_LONG).show();
+            }
+            else if(resultCode == Activity.RESULT_CANCELED){
+                Toast.makeText(NotasExistentes.this, "No se pudo guardar el recordatorio correctamente", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }

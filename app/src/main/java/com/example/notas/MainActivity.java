@@ -1,5 +1,6 @@
 package com.example.notas;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.NotificationChannel;
@@ -136,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     else{
 
-                        Toast.makeText(MainActivity.this, "Recordatorio creado con exito" , Toast.LENGTH_LONG).show();
+                       // Toast.makeText(MainActivity.this, "Recordatorio creado con exito" , Toast.LENGTH_LONG).show();
 
 
                         alarm.set(AlarmManager.RTC_WAKEUP, calendario.getTimeInMillis() + ((new Long(((TimePicker)hora.getTag()).getHour()) )*3600000 ) + ((new Long(((TimePicker)hora.getTag()).getMinute()))* 60000) , pendingIntent);
@@ -147,7 +148,16 @@ public class MainActivity extends AppCompatActivity {
 
                         RecordatorioModel recordatorio = new RecordatorioModel(descripcion.getText().toString(),calendario.getTime());
                         RecordatorioRepository repositorio = new RecordatorioRepository(new RecordatorioPreferencesDataSource(getBaseContext()));
-                        repositorio.guardarRecordatorio(recordatorio);
+                        Intent result = new Intent();
+                        if(repositorio.guardarRecordatorio(recordatorio)){
+                            setResult(Activity.RESULT_OK,result);
+                            finish();
+                        }
+                        else {
+                            setResult(Activity.RESULT_CANCELED,result);
+                            finish();
+                        }
+
                     }
                 }
 
