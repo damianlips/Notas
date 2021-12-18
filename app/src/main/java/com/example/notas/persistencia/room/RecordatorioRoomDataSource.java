@@ -12,13 +12,16 @@ import java.util.List;
 
 public class RecordatorioRoomDataSource implements RecordatorioDataSource {
 
-    private static MyRoomDB roomdb;
-    private static RecordatorioDAO roomdao;
+    private static MyRoomDB roomdb=null;
+    private static RecordatorioDAO roomdao=null;
 
     public RecordatorioRoomDataSource(Context ctx) {
-        roomdb = Room.databaseBuilder(ctx,MyRoomDB.class,"roomdb").fallbackToDestructiveMigration().build();
-        roomdao = roomdb.getRecordatorioDAO();
+        if(roomdb == null){
+            roomdb = Room.databaseBuilder(ctx,MyRoomDB.class,"roomdb").fallbackToDestructiveMigration().build();
+            roomdao = roomdb.getRecordatorioDAO();
+        }
     }
+
 
     @Override
     public void guardarRecordatorio(RecordatorioModel recordatorio, GuardarRecordatorioCallback callback) {
@@ -26,7 +29,13 @@ public class RecordatorioRoomDataSource implements RecordatorioDataSource {
             roomdao.nuevoRecordatorio(recordatorio);
             callback.resultado(true);
         };
-        new Thread(insertFila).start();
+        Thread hilo = new Thread(insertFila);
+        hilo.start();
+        try {
+            hilo.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -36,6 +45,13 @@ public class RecordatorioRoomDataSource implements RecordatorioDataSource {
             recordatorios.addAll(Arrays.asList(roomdao.cargarRecordatorios()));
             callback.resultado(true,recordatorios);
         };
-        new Thread(obtenerFilas).start();
+        Thread hilo = new Thread(obtenerFilas);
+        hilo.start();
+        try {
+            hilo.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
 }

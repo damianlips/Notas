@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecordatorioRepository {
-    private final RecordatorioDataSource datasource;
+    private static RecordatorioDataSource datasource;
 
     public RecordatorioRepository(Context ctx){
-        switch (0){
+        switch (1){
             case 0:
                 this.datasource = new RecordatorioPreferencesDataSource(ctx);
                 break;
@@ -52,7 +52,7 @@ public class RecordatorioRepository {
             @Override
             public void resultado(boolean exito, List<RecordatorioModel> recordatorios) {
                 if(exito){
-//                    salida = exito;
+                    salida = exito;
                     lista.addAll(recordatorios);
                 }
             }

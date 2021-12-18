@@ -31,7 +31,7 @@ import com.example.notas.persistencia.RecordatorioRepository;
 import java.time.LocalDate;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity {
+public class CrearRecordatorio extends AppCompatActivity {
 
     public static int persistencia=0;
 
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(CrearRecordatorio.this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
                 StringBuilder strb = new StringBuilder();
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             }
         },  LocalDate.now().getYear(), LocalDate.now().getMonthValue()-1, LocalDate.now().getDayOfMonth());
 
-        TimePickerDialog timePickerDialog = new TimePickerDialog(MainActivity.this,
+        TimePickerDialog timePickerDialog = new TimePickerDialog(CrearRecordatorio.this,
                 new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int i, int i1) {
@@ -136,17 +136,17 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 final AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                Intent destino = new Intent(MainActivity.this, RecordatorioReceiver.class);
+                Intent destino = new Intent(CrearRecordatorio.this, RecordatorioReceiver.class);
                 destino.setAction("com.example.tp3.NOTA");
                 destino.putExtra("Texto", descripcion.getText().toString());
                 PendingIntent pendingIntent =
-                        PendingIntent.getBroadcast(MainActivity.this,0,destino,0);
+                        PendingIntent.getBroadcast(CrearRecordatorio.this,0,destino,0);
                 if(TextUtils.isEmpty(fecha.getText())){
-                    Toast.makeText(MainActivity.this, "Seleccione una fecha", Toast.LENGTH_LONG).show();
+                    Toast.makeText(CrearRecordatorio.this, "Seleccione una fecha", Toast.LENGTH_LONG).show();
                 }
                 else {
                     if(TextUtils.isEmpty(hora.getText())){
-                        Toast.makeText(MainActivity.this, "Seleccione una hora" , Toast.LENGTH_LONG).show();
+                        Toast.makeText(CrearRecordatorio.this, "Seleccione una hora" , Toast.LENGTH_LONG).show();
                     }
                     else{
 
@@ -170,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
                             finish();
                         }
                         else {
+                            result.putExtra("resultado","fallo");
                             setResult(Activity.RESULT_CANCELED,result);
                             finish();
                         }
