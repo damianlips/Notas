@@ -3,6 +3,7 @@ package com.example.notas.persistencia;
 import android.content.Context;
 
 import com.example.notas.model.RecordatorioModel;
+import com.example.notas.persistencia.retrofit.RecordatorioRetrofitDataSource;
 import com.example.notas.persistencia.room.RecordatorioRoomDataSource;
 import com.example.notas.persistencia.sharedpreferences.RecordatorioPreferencesDataSource;
 
@@ -13,15 +14,15 @@ public class RecordatorioRepository {
     private static RecordatorioDataSource datasource;
 
     public RecordatorioRepository(Context ctx){
-        switch (1){
+        switch (2){
             case 0:
                 this.datasource = new RecordatorioPreferencesDataSource(ctx);
                 break;
             case 1:
                 this.datasource = new RecordatorioRoomDataSource(ctx);
                 break;
-            default:
-                this.datasource = new RecordatorioPreferencesDataSource(ctx);
+            case 2:
+                this.datasource = new RecordatorioRetrofitDataSource(ctx);
                 break;
 
         }
