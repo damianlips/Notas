@@ -161,11 +161,13 @@ public class CrearRecordatorio extends AppCompatActivity {
 
                         RecordatorioModel recordatorio = new RecordatorioModel(descripcion.getText().toString(),new Date(fechamillis));
 
+                        Toast.makeText(CrearRecordatorio.this,recordatorio.getFecha().toString(),Toast.LENGTH_LONG).show();
                         Intent result = new Intent();
                         if(repositorio.guardarRecordatorio(recordatorio)){
                             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-                            if(sharedPreferences.getBoolean("mostrar_notificaciones",false))
+                            if(sharedPreferences.getBoolean("mostrar_notificaciones",false)) {
                                 alarm.set(AlarmManager.RTC_WAKEUP, fechamillis , pendingIntent);
+                            }
                             setResult(Activity.RESULT_OK,result);
                             finish();
                         }

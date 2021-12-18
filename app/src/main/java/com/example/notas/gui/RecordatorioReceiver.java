@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
-import android.widget.Toast;
 
 public class RecordatorioReceiver extends BroadcastReceiver {
     public static String RECORDATORIO = "com.example.tp3.NOTA";

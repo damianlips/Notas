@@ -1,17 +1,17 @@
 package com.example.notas.gui;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,7 +25,6 @@ import com.example.notas.persistencia.RecordatorioRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class NotasExistentes extends AppCompatActivity {
@@ -40,6 +39,7 @@ public class NotasExistentes extends AppCompatActivity {
     RecordatorioRepository repositorio;
     String[] menu = {"Crear recordatorio", "Configuraciones"};
     private static final int CODIGO_CREAR_NOTA = 123;
+    private static final int CODIGO_SETTINGS = 222;
 
     private void actualizarLista(){
 
@@ -47,9 +47,13 @@ public class NotasExistentes extends AppCompatActivity {
             List<String> l;
             @Override
             protected Object doInBackground(Object[] objects) {
+                l = new ArrayList<String>();
                 List<RecordatorioModel> lista = new ArrayList<>();
                 lista.addAll(repositorio.recuperarRecordatorios());
-                l = lista.stream().map(c-> c.toString()).collect(Collectors.toList());
+                for(RecordatorioModel r : lista){
+                    l.add(r.toString());
+                }
+//                l = lista.stream().map(c-> c.toString()).collect(Collectors.toList());
                 return l;
             }
 
@@ -148,7 +152,9 @@ public class NotasExistentes extends AppCompatActivity {
                         break;
                     case 1:
                         Intent intent2 = new Intent(NotasExistentes.this, Settings.class);
-                        startActivity(intent2);
+                        startActivityForResult(intent2,CODIGO_SETTINGS);
+                        repositorio.actualizarTipo(getBaseContext());
+                        actualizarLista();
                         break;
                 }
             }
@@ -169,6 +175,13 @@ public class NotasExistentes extends AppCompatActivity {
                 if(data!=null){
                     Toast.makeText(NotasExistentes.this, "No se pudo guardar el recordatorio correctamente", Toast.LENGTH_LONG).show();
                 }
+            }
+        }
+        else{
+            if(requestCode == CODIGO_SETTINGS){
+                repositorio = new RecordatorioRepository(getBaseContext());
+                repositorio.actualizarTipo(getBaseContext());
+                actualizarLista();
             }
         }
     }

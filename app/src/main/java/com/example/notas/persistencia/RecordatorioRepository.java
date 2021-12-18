@@ -1,6 +1,9 @@
 package com.example.notas.persistencia;
 
+import android.app.AlarmManager;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.example.notas.model.RecordatorioModel;
 import com.example.notas.persistencia.retrofit.RecordatorioRetrofitDataSource;
@@ -13,8 +16,11 @@ import java.util.List;
 public class RecordatorioRepository {
     private static RecordatorioDataSource datasource;
 
-    public RecordatorioRepository(Context ctx){
-        switch (0){
+    public void actualizarTipo(Context ctx){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+        int tipo = Integer.valueOf(sharedPreferences.getString("tipo_persistencia","0"));
+
+        switch (tipo){
             case 0:
                 this.datasource = new RecordatorioPreferencesDataSource(ctx);
                 break;
@@ -26,6 +32,12 @@ public class RecordatorioRepository {
                 break;
 
         }
+    }
+
+    public RecordatorioRepository(Context ctx){
+
+        actualizarTipo(ctx);
+
     }
 
     public RecordatorioRepository(final RecordatorioDataSource datasource) {

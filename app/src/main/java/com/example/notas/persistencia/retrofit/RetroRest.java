@@ -1,9 +1,10 @@
 package com.example.notas.persistencia.retrofit;
 
-import android.util.Log;
+import android.content.Context;
 
 import com.example.notas.model.RecordatorioModel;
 
+import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -15,10 +16,10 @@ public class RetroRest {
     private RecordatorioModel data;
     private List<RecordatorioModel> datalista;
     private RecordatorioRest recordatorioRest;
-    public RetroRest() {
+    public RetroRest(Context ctx) {
         this.data = null;
         this.datalista = null;
-        recordatorioRest = RetrofitConfig.getRecordatorioRest();
+        recordatorioRest = RetrofitConfig.getRecordatorioRest(ctx);
     }
 
     public RecordatorioModel guardarRecordatorio(RecordatorioModel r){
@@ -53,15 +54,18 @@ public class RetroRest {
         return data;
     };
 
-    public List<RecordatorioModel> listarTodos(){
-
+    public List<RecordatorioModel> listarTodos()  {
+        datalista=null;
         Call<List<RecordatorioModel>> llamada = recordatorioRest.listarTodos();
-        llamada.enqueue(new Callback<List<RecordatorioModel>>(){
-            @Override
-            public void onResponse(Call<List<RecordatorioModel>> call, Response<List<RecordatorioModel>> response) {
-                switch (response.code()) {
+
+        Response<List<RecordatorioModel>> res = null;
+
+        try {
+            res = llamada.execute();
+
+            switch (res.code()) {
                     case 200:
-                        datalista = response.body();
+                        datalista = res.body();
                         break;
                     case 401:
                     case 403:
@@ -70,14 +74,11 @@ public class RetroRest {
                     default:
                         break;
                 }
-            }
 
-            @Override
-            public void onFailure(Call<List<RecordatorioModel>> call, Throwable t) {
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-            }
-
-        });
         return datalista;
     };
 

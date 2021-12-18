@@ -6,5 +6,6 @@
     <string name="textoguardar">Guardar</string>
     <string name="drawer_open">Abierto</string>
     <string name="drawer_close">Cerrado</string>
-
+    <string name="user2">25407</string>
+    <string name="password">122334</string>
 </resources>

@@ -10,6 +10,8 @@ import java.util.UUID;
 
 import android.support.annotation.NonNull;
 
+import com.google.gson.annotations.SerializedName;
+
 
 @Entity(tableName = "TABLA_RECORDATORIOS")
 public class RecordatorioModel {
@@ -19,7 +21,7 @@ public class RecordatorioModel {
     @ColumnInfo(name = "ID_RECORDATORIO")
     private String id;
 
-
+    @SerializedName("mensaje")
     private String texto;
     private Date fecha;
 

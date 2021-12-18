@@ -21,9 +21,9 @@ public class RecordatorioRetrofitDataSource implements RecordatorioDataSource {
     private static RetroRest rr;
 
     public RecordatorioRetrofitDataSource(Context ctx) {
-        if(rr == null){
-            rr = new RetroRest();
-        }
+
+            rr = new RetroRest(ctx);
+
     }
 
     @Override
