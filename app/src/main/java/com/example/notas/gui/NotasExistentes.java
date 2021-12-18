@@ -2,12 +2,17 @@ package com.example.notas.gui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -61,16 +66,46 @@ public class NotasExistentes extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mDrawerToggle.syncState();
+    }
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // 2.
+        // the default behaviour for ActionBarDrawerToggle
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            // 3.
+            // here you can define your custom click listener / onClick method
+            // for ActionBarDrawerToggle
+           // String customClick = getResources().getString(R.string.custom_click_event);
+            //Toast.makeText(this, customClick, Toast.LENGTH_LONG).show();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notas_existentes);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
         ld = findViewById(R.id.left_drawer);
         creadas = findViewById(R.id.creadas);
         repositorio = new RecordatorioRepository(getBaseContext());
-
         creados=new ArrayList<String>();
         adapterCreadas = new ArrayAdapter<String>(NotasExistentes.this, android.R.layout.simple_list_item_1,creados);
         creadas.setAdapter(adapterCreadas);
@@ -78,12 +113,30 @@ public class NotasExistentes extends AppCompatActivity {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(NotasExistentes.this, android.R.layout.simple_list_item_1,menu);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(false);
         mDrawerToggle = new ActionBarDrawerToggle(
                 this, /* host Activity */
                 mDrawerLayout, /* DrawerLayout object */
                 R.string.drawer_open, /* "open drawer" description */
                 R.string.drawer_close /* "close drawer" description */
-        );
+        ){
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                //getSupportActionBar().setTitle("c");
+            }
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                //getSupportActionBar().setTitle("a");
+            }
+
+        };
+        //mDrawerToggle.syncState();
+
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
+
+
+
         ld.setAdapter(adapter);
         ld.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
