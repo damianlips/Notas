@@ -14,7 +14,7 @@ public class RecordatorioRepository {
     private static RecordatorioDataSource datasource;
 
     public RecordatorioRepository(Context ctx){
-        switch (2){
+        switch (0){
             case 0:
                 this.datasource = new RecordatorioPreferencesDataSource(ctx);
                 break;

@@ -79,7 +79,7 @@ public class RecordatorioModel {
         if(fecha.getMonth()<9) strb.append('0');
         strb.append(fecha.getMonth()+1);
         strb.append('/');
-        strb.append(fecha.getYear());
+        strb.append(fecha.getYear()+1900);
         strb.append(" a las ");
         if(fecha.getHours()<10) strb.append('0');
         strb.append(fecha.getHours());
