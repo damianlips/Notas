@@ -9,6 +9,7 @@ import com.example.notas.model.RecordatorioModel;
 import com.example.notas.persistencia.retrofit.RecordatorioRetrofitDataSource;
 import com.example.notas.persistencia.room.RecordatorioRoomDataSource;
 import com.example.notas.persistencia.sharedpreferences.RecordatorioPreferencesDataSource;
+import com.example.notas.persistencia.sqlite.RecordatorioSqliteDataSource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,9 @@ public class RecordatorioRepository {
                 break;
             case 2:
                 this.datasource = new RecordatorioRetrofitDataSource(ctx);
+                break;
+            case 3:
+                this.datasource = new RecordatorioSqliteDataSource(ctx);
                 break;
 
         }
